@@ -95,3 +95,4 @@ def mean(s):
     return average
     
     # END Question 1
+    
