@@ -16,11 +16,7 @@ def map_and_filter(s, map_fn, filter_fn):
     [1, 9, 25]
     """
     # BEGIN Question 0
-    new_list = []
-    for i in s:
-        if filter_fn(i) == True:
-            new_list.append(map_fn(i))
-    return new_list
+    return [map_fn(i) for i in s if filter_fn(i) == True]
     # END Question 0
 
 def key_of_min_value(d):
@@ -91,8 +87,7 @@ def mean(s):
     "*** YOUR CODE HERE ***"
     
     assert len(s) != 0, 'no data'
-    average = sum(s) / len(s)
-    return average
+    return sum(s) / len(s)
     
     # END Question 1
     

@@ -100,7 +100,7 @@ def restaurant_ratings(restaurant):
     restaurant based on the reviews of the restaurant."""
     # BEGIN Question 2        
     "*** YOUR CODE HERE ***"
-    r = restaurant[4]
-    return [review_rating(review) for review in r]
+    reviews = restaurant[4]
+    return [review_rating(review) for review in reviews]
                                        
     # END Question 2

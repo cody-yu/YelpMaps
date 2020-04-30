@@ -20,7 +20,16 @@ def find_closest(location, centroids):
     """
     # BEGIN Question 3
     "*** YOUR CODE HERE ***"
-    return min(centroids, key = lambda c: distance(location, c))                     
+    """
+    return min(centroids, key = lambda c: distance(location, c))    
+    """
+    closest_location = location
+    closest_distance = float("inf")
+    for centroid in centroids:
+        if distance(location, centroid) < closest_distance:
+            closest_location = centroid
+            closest_distance = distance(location, centroid)
+    return closest_location       
         
     # END Question 3
 
@@ -52,8 +61,7 @@ def group_by_centroid(restaurants, centroids):
     """
     # BEGIN Question 4
     "*** YOUR CODE HERE ***"
-    x = [[find_closest(restaurant_location(restaurant), centroids), restaurant] for restaurant in restaurants]
-    return group_by_first(x)
+    return group_by_first([[find_closest(restaurant_location(restaurant), centroids), restaurant] for restaurant in restaurants])
     # END Question 4
 
 
@@ -62,14 +70,13 @@ def find_centroid(cluster):
     # BEGIN Question 5
     "*** YOUR CODE HERE ***"
     
-    lst = [restaurant_location(restaurant) for restaurant in cluster]
-    for i in lst:
-        lat = [k[0] for k in lst]
-        mean_lat = mean(lat)
-        lon = [k[1] for k in lst]
-        mean_lon = mean(lon)
-        centroid_cluster = [mean_lat] + [mean_lon]
-    return centroid_cluster
+    locations = [restaurant_location(restaurant) for restaurant in cluster]
+    latitudes = [location[0] for location in locations]
+    mean_latitude = mean(latitudes)
+    longitudes = [location[1] for location in locations]
+    mean_longitude = mean(longitudes)
+    centroid = [mean_latitude, mean_longitude]
+    return centroid
     
     
     # END Question 5
@@ -114,16 +121,16 @@ def find_predictor(user, restaurants, feature_fn):
     # BEGIN Question 7
     sxx = 0
     for i in xs:
-        sxx = sxx + pow(i - mean(xs), 2)
+        sxx += (i - mean(xs)) ** 2
     syy = 0
     for i in ys:
-        syy = syy + pow(i - mean(ys), 2)
+        syy += (i - mean(ys)) ** 2
     sxy = 0
     for i in zip(xs, ys):
-        sxy = sxy + ((i[0] - mean(xs)) * (i[1] - mean(ys)))
+        sxy += (i[0] - mean(xs)) * (i[1] - mean(ys))
     b = sxy / sxx
     a = mean(ys) - b * mean(xs)
-    r_squared = pow(sxy, 2) / (sxx * syy)
+    r_squared = (sxy * sxy) / (sxx * syy)
 
                      
     # END Question 7
@@ -165,13 +172,13 @@ def rate_all(user, restaurants, feature_fns):
     reviewed = user_reviewed_restaurants(user, restaurants)
     # BEGIN Question 9
     "*** YOUR CODE HERE ***"
-    new_dict = {}
+    predicted_ratings = {}
     for restaurant in restaurants:
         if restaurant in reviewed:
-            new_dict[restaurant_name(restaurant)] = user_rating(user, restaurant_name(restaurant))
+            predicted_ratings[restaurant_name(restaurant)] = user_rating(user, restaurant_name(restaurant))
         else:
-            new_dict[restaurant_name(restaurant)] = predictor(restaurant)
-    return new_dict
+            predicted_ratings[restaurant_name(restaurant)] = predictor(restaurant)
+    return predicted_ratings 
     
     # END Question 9
 
